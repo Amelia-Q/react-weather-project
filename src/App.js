@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import "./App.css";
 
 class App extends Component {
   state = { weather: {} };
@@ -24,13 +25,20 @@ class App extends Component {
 
     const { list } = this.state.weather;
 
+    /* const { name, country } = data.city;
+    const title = `<h1 class="title">Weather for ${name}, ${country}</h1>`; */
+
     if (!list) {
-      return <h1>Loading...</h1>;
+      return <div className="loader"></div>;
     }
 
     return (
-      <>
-        {list.map((item) => {
+      /* <h1 className="title">Weather for {data.city.name}, {data.city.country}</h1> */
+      <div className="allForecastItems">
+        {list.map((item, index) => {
+          if (index % 3 !== 0) {
+            return;
+          }
           return (
             <div className="forecastItems">
               <p className="forecastItem date">
@@ -53,7 +61,7 @@ class App extends Component {
             </div>
           );
         })}
-      </>
+      </div>
     );
   }
 }
