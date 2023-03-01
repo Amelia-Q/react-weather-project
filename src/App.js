@@ -5,20 +5,32 @@ import "./App.css";
 class App extends Component {
   state = { weather: {} };
 
+  success = async ({ coords }) => {
+    const { latitude: lat, longitude: lon } = coords;
+    const { data } = await axios.get(
+      `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&cnt=10&appid=17a3e02a9cc47ed1eac90bc2f9c0012a`
+    );
+    this.setState({ weather: data });
+  };
   /* This gets the data */
   async componentDidMount() {
-    const success = async ({ coords }) => {
-      const { latitude: lat, longitude: lon } = coords;
-      const { data } = await axios.get(
-        `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&cnt=10&appid=17a3e02a9cc47ed1eac90bc2f9c0012a`
-      );
-      this.setState({ weather: data });
-    };
-
     const error = () => {};
 
-    navigator.geolocation.getCurrentPosition(success, error);
+    navigator.geolocation.getCurrentPosition(this.success, error);
   }
+
+  onInput = async (e) => {
+    this.setState({ userInput: e.target.value });
+    const userCoords = await axios.get(
+      `http://api.openweathermap.org/geo/1.0/direct?q=${e.target.value}&limit=10&appid=17a3e02a9cc47ed1eac90bc2f9c0012a`
+    );
+    this.success({
+      coords: {
+        longitude: userCoords.data[0].lon,
+        latitude: userCoords.data[0].lat,
+      },
+    });
+  };
 
   render() {
     console.log(this.state);
@@ -41,6 +53,7 @@ class App extends Component {
         <form>
           <label htmlFor="location">Location</label>
           <input
+            onInput={this.onInput}
             id="location"
             type="text"
             name="location"
