@@ -33,35 +33,47 @@ class App extends Component {
     }
 
     return (
-      /* <h1 className="title">Weather for {data.city.name}, {data.city.country}</h1> */
-      <div className="allForecastItems">
-        {list.map((item, index) => {
-          if (index % 3 !== 0) {
-            return;
-          }
-          return (
-            <div className="forecastItems">
-              <p className="forecastItem date">
-                {new Date(item.dt * 1000).toLocaleString()}
-              </p>
-              <p className="forecastItem temperature">
-                {Math.round(item.main.temp - 273.15)}ºC
-              </p>
-              <p className="forecastItem weather">
-                {item.weather[0].main.toUpperCase()}
-              </p>
-              <p className="forecastItem icon">
-                <img
-                  src="http://openweathermap.org/img/wn/{
-              item.weather[0].icon
-              }.png"
-                  alt={item.weather[0].main}
-                />
-              </p>
-            </div>
-          );
-        })}
-      </div>
+      <>
+        <h1 className="title">
+          Weather for {this.state.weather.city.name},{" "}
+          {this.state.weather.city.country}
+        </h1>
+        <form>
+          <label htmlFor="location">Location</label>
+          <input
+            id="location"
+            type="text"
+            name="location"
+            placeholder="You can type in your location here"
+          />
+        </form>
+        <div className="allForecastItems">
+          {list.map((item, index) => {
+            if (index % 3 !== 0) {
+              return;
+            }
+            return (
+              <div className="forecastItems">
+                <p className="forecastItem date">
+                  {new Date(item.dt * 1000).toLocaleString()}
+                </p>
+                <p className="forecastItem temperature">
+                  {Math.round(item.main.temp - 273.15)}ºC
+                </p>
+                <p className="forecastItem weather">
+                  {item.weather[0].main.toUpperCase()}
+                </p>
+                <p className="forecastItem icon">
+                  <img
+                    src={`http://openweathermap.org/img/wn/${item.weather[0].icon}.png`}
+                    alt={item.weather[0].main}
+                  />
+                </p>
+              </div>
+            );
+          })}
+        </div>
+      </>
     );
   }
 }
